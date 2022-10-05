@@ -12,7 +12,7 @@ public class LKW extends Vehicle {
         this.maxWeight = maxWeight;
     }
 
-    public void printDescription() {
+    public void printInfo() {
         System.out.println("Ich bin ein " + super.getColor() + "er " + super.getName() + ", Modell " + super.getModel() + " von der Marke " + super.getBrand() + ".");
         System.out.println("Ich verbrauche " + super.getFuelConsumption() + " liter Benzin pro Kilometer und habe noch " + super.getFuelLevel() + " Liter im Tank!");
         System.out.println("Ich kann maximal " + maxWeight + " kg transportieren!");
@@ -20,5 +20,8 @@ public class LKW extends Vehicle {
 
     public int getIndexLKW() {
         return index;
+    }
+    public int getMaxWeight(){
+        return maxWeight;
     }
 }

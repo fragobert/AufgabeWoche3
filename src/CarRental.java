@@ -4,7 +4,6 @@ import java.util.Scanner;
 public class CarRental extends VehicleRental {
     private static final String[] brands = {"BMW", "Mercedes", "Audi", "VW", "Opel", "Ford", "Fiat", "Renault", "Peugeot", "Citroen"};
     private static final String[] names = {"M3", "A45", "RS6", "Golf_GTI", "Astra", "Focus", "500", "Clio", "308", "C4"};
-    private static final String[] colors = {"rot", "blau", "schwarz", "weiß", "grün", "gelb", "orange", "violett", "pink", "braun"};
     private final ArrayList<Car> cars = new ArrayList<>();
     private final ArrayList<Car> rentedCars = new ArrayList<>();
 
@@ -14,15 +13,15 @@ public class CarRental extends VehicleRental {
             System.exit(0);
         }
         for (int i = 0; i < arraySize; i++) {
-            cars.add(new Car((int) (Math.random() * 1000), (int) (Math.random() * 10), (int) (Math.random() * 100), (int) (Math.random() * 1000), getRandom(names), getRandom(colors), getRandom(brands)));
+            cars.add(new Car((int) (Math.random() * 1000), (int) (Math.random() * 10)+1, (int) (Math.random() * 100), (int) (Math.random() * 1000), getRandom(names), getRandom(super.getColors()), getRandom(brands)));
         }
     }
 
 
-    public ArrayList<Car> findCar(String brands, String names, String colors) {
+    public ArrayList<Car> findCar(String brand, String name) {
         ArrayList<Car> foundCars = new ArrayList<>();
         for (Car car : cars) {
-            if (car.getBrand().equals(brands) && car.getName().equals(names) && car.getColor().equals(colors)) {
+            if (car.getBrand().equals(brand) && car.getName().equals(name)) {
                 foundCars.add(car);
             }
         }
@@ -77,12 +76,13 @@ public class CarRental extends VehicleRental {
         String tabs;
 
 
-        System.out.println(ConsoleColors.BOXING + " Index" + "\t" + stringFormatter("Brand") + " " + stringFormatter("Name") + " " + stringFormatter("Color") + " " + stringFormatter("Model") + " ");
+        System.out.println(ConsoleColors.BOXING + " Index" + "\t" + stringFormatter("Brand") + " " + stringFormatter("Name") + " " + stringFormatter("Model") + " " + stringFormatter("Topspeed") + " "+ stringFormatter("Color") + " ");
         for (Car car : cars) {
             if (car.getIndexCar() > 99) {
                 tabs = "\t";
             } else tabs = "\t\t";
-            carList.append(ConsoleColors.WHITE_BRIGHT + " ").append(car.getIndexCar()).append(tabs).append(stringFormatter(car.getBrand())).append(" ").append(stringFormatter(car.getName())).append(" ").append(stringFormatter(car.getColor())).append(" ").append(stringFormatter(Integer.toString(car.getModel()))).append("\n");
+            carList.append(ConsoleColors.WHITE_BRIGHT + " ").append(car.getIndexCar()).append(tabs).append(stringFormatter(car.getBrand())).append(" ").append(stringFormatter(car.getName())).append(" ").append(stringFormatter(Integer.toString(car.getModel()))).append(stringFormatter(Integer.toString(car.getTopSpeed()))).append("\t\t ").append(stringFormatter(car.getColor())).append("\n");
+
         }
 
         return carList.toString();
@@ -110,15 +110,14 @@ public class CarRental extends VehicleRental {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
-            System.out.println(ConsoleColors.CYAN);
             System.out.println("1. Alle Autos anzeigen");
             System.out.println("2. ALle bereits vermieteten Autos anzeigen");
             System.out.println("3. Auto mieten");
             System.out.println("4. Auto zurückgeben");
             System.out.println("5. Auto suchen");
             System.out.println("6. Nachsehen ob Auto verfuegbar ist");
-            System.out.println("7. Zurück zum Hauptmenü");
-            System.out.println(ConsoleColors.RESET);
+            System.out.println("7. Informationen zu einem Auto anzeigen");
+            System.out.println("8. Zurück zum Hauptmenü");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> this.getCarsToString();
@@ -127,39 +126,48 @@ public class CarRental extends VehicleRental {
                     System.out.println("Bitte geben Sie die Index des LKWs ein, den Sie mieten möchten:");
                     int index = scanner.nextInt();
                     if (this.rentCar(this.cars.get(index - 1))) {
-                        System.out.println(ConsoleColors.GREEN + "LKW erfolgreich vermietet!" + ConsoleColors.RESET);
+                        System.out.println(ConsoleColors.GREEN + "Auto erfolgreich vermietet!" + ConsoleColors.RESET);
                     } else {
-                        System.out.println(ConsoleColors.RED + "LKW nicht verfügbar!" + ConsoleColors.RESET);
+                        System.out.println(ConsoleColors.RED + "Auto nicht verfügbar!" + ConsoleColors.RESET);
                     }
                 }
                 case 4 -> {
                     System.out.println("Bitte geben Sie die Index des LKWs ein, den Sie zurückgeben möchten:");
                     int index = scanner.nextInt();
                     if (this.rentedCars.remove(this.cars.get(index))) {
-                        System.out.println(ConsoleColors.GREEN + "LKW erfolgreich zurückgegeben!" + ConsoleColors.RESET);
+                        System.out.println(ConsoleColors.GREEN + "Auto erfolgreich zurückgegeben!" + ConsoleColors.RESET);
                     } else {
-                        System.out.println(ConsoleColors.RED + "LKW nicht verfügbar!" + ConsoleColors.RESET);
+                        System.out.println(ConsoleColors.RED + "Auto nicht verfügbar!" + ConsoleColors.RESET);
                     }
                 }
                 case 5 -> {
-                    System.out.println("Bitte geben Sie die Marke des LKWs ein, den Sie suchen möchten:");
+                    System.out.println("Bitte geben Sie die Marke des Autos ein, den Sie suchen möchten:");
                     String brand = scanner.next();
-                    System.out.println("Bitte geben Sie den Namen des LKWs ein, den Sie suchen möchten:");
+                    System.out.println("Bitte geben Sie den Namen des Autos ein, den Sie suchen möchten:");
                     String name = scanner.next();
-                    System.out.println("Bitte geben Sie die Farbe des LKWs ein, den Sie suchen möchten:");
-                    String color = scanner.next();
-                    System.out.println(this.CarListToString(this.findCar(brand, name, color)));
-                }
-                case 6 -> {
-                    System.out.println("Bitte geben Sie die Index des LKWs ein, den Sie nachsehen möchten:");
-                    int index = scanner.nextInt();
-                    if (this.isAvailable(this.cars.get(index))) {
-                        System.out.println(ConsoleColors.GREEN + "LKW verfügbar!" + ConsoleColors.RESET);
+                    ArrayList<Car> foundCars = this.findCar(brand, name);
+                    if(foundCars.isEmpty()) {
+                        System.out.println(ConsoleColors.RED + "Kein Auto gefunden!" + ConsoleColors.RESET);
                     } else {
-                        System.out.println(ConsoleColors.RED + "LKW nicht verfügbar!" + ConsoleColors.RESET);
+                        System.out.println("Folgende Autos wurden gefunden:");
+                        System.out.println(CarListToString(foundCars));
                     }
                 }
-                case 7 -> exit = true;
+                case 6 -> {
+                    System.out.println("Bitte geben Sie die Index des Autos ein, den Sie nachsehen möchten:");
+                    int index = scanner.nextInt();
+                    if (this.isAvailable(this.cars.get(index))) {
+                        System.out.println(ConsoleColors.GREEN + "Auto verfügbar!" + ConsoleColors.RESET);
+                    } else {
+                        System.out.println(ConsoleColors.RED + "Auto nicht verfügbar!" + ConsoleColors.RESET);
+                    }
+                }
+                case 7 -> {
+                    System.out.println("Bitte geben Sie die Index des Autos ein, zu dem Sie Informationen anzeigen möchten:");
+                    int index = scanner.nextInt();
+                    this.cars.get(index).printInfo();
+                }
+                case 8 -> exit = true;
                 case default -> System.out.println(ConsoleColors.RED + "Ungültige Eingabe!" + ConsoleColors.RESET);
             }
         }

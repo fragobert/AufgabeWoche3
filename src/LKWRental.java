@@ -14,14 +14,14 @@ public class LKWRental extends VehicleRental {
             System.exit(0);
         }
         for (int i = 0; i < arraySize; i++) {
-            LKWs.add(new LKW((int) (Math.random() * 1000), (int) (Math.random() * 10), (int) (Math.random() * 100), (int) (Math.random() * 10000), getRandom(names), getRandom(super.getColors()), getRandom(brands)));
+            LKWs.add(new LKW((int) (Math.random() * 1000), (int) (Math.random() * 10)+1, (int) (Math.random() * 100), (int) (Math.random() * 10000), getRandom(names), getRandom(super.getColors()), getRandom(brands)));
         }
     }
 
-    public ArrayList<LKW> findLKW(String brands, String names, String colors) {
+    public ArrayList<LKW> findLKW(String brand, String name) {
         ArrayList<LKW> foundLKWs = new ArrayList<>();
         for (LKW LKW : LKWs) {
-            if (LKW.getBrand().equals(brands) && LKW.getName().equals(names) && LKW.getColor().equals(colors)) {
+            if (LKW.getBrand().equals(brand) && LKW.getName().equals(name)) {
                 foundLKWs.add(LKW);
             }
         }
@@ -58,12 +58,12 @@ public class LKWRental extends VehicleRental {
         String tabs;
 
 
-        System.out.println(ConsoleColors.BOXING + " Index" + "\t" + stringFormatter("Brand") + " " + stringFormatter("Name") + " " + stringFormatter("Color") + " " + stringFormatter("Model") + " ");
+        System.out.println(ConsoleColors.BOXING + " Index" + "\t" + stringFormatter("Brand") + " " + stringFormatter("Name") + " " + stringFormatter("Model") + " " + stringFormatter("Capacity") + " "+ stringFormatter("Color") + " ");
         for (LKW lkw : lkws) {
             if (lkw.getIndexLKW() > 99) {
                 tabs = "\t";
             } else tabs = "\t\t";
-            LKWList.append(ConsoleColors.WHITE_BRIGHT + " ").append(lkw.getIndexLKW()).append(tabs).append(stringFormatter(lkw.getBrand())).append(" ").append(stringFormatter(lkw.getName())).append(" ").append(stringFormatter(lkw.getColor())).append(" ").append(stringFormatter(Integer.toString(lkw.getModel()))).append("\n");
+            LKWList.append(ConsoleColors.WHITE_BRIGHT + " ").append(lkw.getIndexLKW()).append(tabs).append(stringFormatter(lkw.getBrand())).append(" ").append(stringFormatter(lkw.getName())).append(" ").append(stringFormatter(Integer.toString(lkw.getModel()))).append(stringFormatter(Integer.toString(lkw.getMaxWeight()))).append("\t\t ").append(stringFormatter(lkw.getColor())).append("\n");
         }
 
         return LKWList.toString();
@@ -92,15 +92,14 @@ public class LKWRental extends VehicleRental {
         Scanner scanner = new Scanner(System.in);
         boolean exit = false;
         while (!exit) {
-            System.out.println(ConsoleColors.CYAN);
             System.out.println("1. Alle LKWs anzeigen");
             System.out.println("2. ALle bereits vermieteten LKWs anzeigen");
             System.out.println("3. LKW mieten");
             System.out.println("4. LKW zurückgeben");
             System.out.println("5. LKW suchen");
             System.out.println("6. Nachsehen ob LKW verfuegbar ist");
-            System.out.println("7. Zurück zum Hauptmenü");
-            System.out.println(ConsoleColors.RESET);
+            System.out.println("7. Informationen zum LKW anzeigen");
+            System.out.println("8. Zurück zum Hauptmenü");
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1 -> this.getLKWsToString();
@@ -108,19 +107,27 @@ public class LKWRental extends VehicleRental {
                 case 3 -> {
                     System.out.println("Bitte geben Sie die Index des LKWs ein, den Sie mieten möchten:");
                     int index = scanner.nextInt();
-                    if (this.rentLKW(this.LKWs.get(index))) {
-                        System.out.println(ConsoleColors.GREEN + "LKW erfolgreich vermietet!" + ConsoleColors.RESET);
+                    if (index < 0 || index >= LKWs.size()) {
+                        System.out.println(ConsoleColors.RED + "Fehler: Der Index ist ungültig!" + ConsoleColors.RESET);
                     } else {
-                        System.out.println(ConsoleColors.RED + "LKW nicht verfügbar!" + ConsoleColors.RESET);
+                        if (rentLKW(LKWs.get(index))) {
+                            System.out.println(ConsoleColors.GREEN + "Der LKW wurde erfolgreich vermietet!" + ConsoleColors.RESET);
+                        } else {
+                            System.out.println(ConsoleColors.RED + "Der LKW ist bereits vermietet!" + ConsoleColors.RESET);
+                        }
                     }
                 }
                 case 4 -> {
                     System.out.println("Bitte geben Sie die Index des LKWs ein, den Sie zurückgeben möchten:");
                     int index = scanner.nextInt();
-                    if (this.returnLKW((this.LKWs.get(index)))) {
-                        System.out.println(ConsoleColors.GREEN + "LKW erfolgreich zurückgegeben!" + ConsoleColors.RESET);
+                    if(index < 0 || index >= LKWs.size()) {
+                        System.out.println(ConsoleColors.RED + "Fehler: Der Index ist ungültig!" + ConsoleColors.RESET);
                     } else {
-                        System.out.println(ConsoleColors.RED + "LKW nicht verfügbar!" + ConsoleColors.RESET);
+                        if (returnLKW(LKWs.get(index))) {
+                            System.out.println(ConsoleColors.GREEN + "Der LKW wurde erfolgreich zurückgegeben!" + ConsoleColors.RESET);
+                        } else {
+                            System.out.println(ConsoleColors.RED + "Der LKW ist nicht vermietet!" + ConsoleColors.RESET);
+                        }
                     }
                 }
                 case 5 -> {
@@ -128,9 +135,13 @@ public class LKWRental extends VehicleRental {
                     String brand = scanner.next();
                     System.out.println("Bitte geben Sie den Namen des LKWs ein, den Sie suchen möchten:");
                     String name = scanner.next();
-                    System.out.println("Bitte geben Sie die Farbe des LKWs ein, den Sie suchen möchten:");
-                    String color = scanner.next();
-                    System.out.println(this.LKWListToString(this.findLKW(brand, name, color)));
+                    ArrayList<LKW> foundLKWs = findLKW(brand, name);
+                    if(foundLKWs.isEmpty()) {
+                        System.out.println(ConsoleColors.RED + "Es wurden keine LKWs gefunden!" + ConsoleColors.RESET);
+                    } else {
+                        System.out.println("Die folgenden LKWs wurden gefunden:");
+                        System.out.println(LKWListToString(foundLKWs));
+                    }
                 }
                 case 6 -> {
                     System.out.println("Bitte geben Sie die Index des LKWs ein, den Sie nachsehen möchten:");
@@ -141,7 +152,17 @@ public class LKWRental extends VehicleRental {
                         System.out.println(ConsoleColors.RED + "LKW nicht verfügbar!" + ConsoleColors.RESET);
                     }
                 }
-                case 7 -> exit = true;
+                case 7 -> {
+                    System.out.println("Bitte geben Sie die Index des LKWs ein, den Sie nachsehen möchten:");
+                    int index = scanner.nextInt();
+                    if(index < 0 || index >= LKWs.size()) {
+                        System.out.println(ConsoleColors.RED + "Fehler: Der Index ist ungültig!" + ConsoleColors.RESET);
+                    } else {
+                        this.LKWs.get(index).printInfo();
+                    }
+
+                }
+                case 8 -> exit = true;
                 case default -> System.out.println(ConsoleColors.RED + "Ungültige Eingabe!" + ConsoleColors.RESET);
             }
         }

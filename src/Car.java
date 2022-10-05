@@ -12,7 +12,7 @@ public class Car extends Vehicle {
         this.topSpeed = topSpeed;
     }
 
-    public void printDescription() {
+    public void printInfo() {
         System.out.println("Ich bin ein " + super.getColor() + "er " + super.getName() + ", Modell " + super.getModel() + " von der Marke " + super.getBrand() + ".");
         System.out.println("Ich verbrauche " + super.getFuelConsumption() + " liter Benzin pro Kilometer und habe noch " + super.getFuelLevel() + " Liter im Tank!");
         System.out.println("Meine Höchstgeschwindigkeit ist "+getTopSpeed()+"km/h");

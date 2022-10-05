@@ -1,8 +1,7 @@
 import java.util.ArrayList;
 
 public class VehicleRental {
-    private static final String[] colors = {"red", "blue", "green", "yellow", "black", "white", "brown", "orange", "purple"};
-    private static final String[] colorsInConsole = {ConsoleColors.RED, ConsoleColors.BLUE, ConsoleColors.GREEN, ConsoleColors.YELLOW, ConsoleColors.BLACK, ConsoleColors.WHITE, ConsoleColors.BROWN, ConsoleColors.ORANGE, ConsoleColors.PURPLE};
+    private static final String[] colors = {ConsoleColors.RED + "Rot" + ConsoleColors.RESET, ConsoleColors.GREEN + "Grün" + ConsoleColors.RESET, ConsoleColors.BLUE + "Blau" + ConsoleColors.RESET, ConsoleColors.YELLOW + "Gelb" + ConsoleColors.RESET, ConsoleColors.CYAN + "Cyan" + ConsoleColors.RESET, ConsoleColors.PURPLE + "Lila" + ConsoleColors.RESET, ConsoleColors.WHITE + "Weiß" + ConsoleColors.RESET, ConsoleColors.BLACK + "Schwarz" + ConsoleColors.RESET};
 
     private Vehicle[] vehicles;
     private final ArrayList<Vehicle> rentedVehicles = new ArrayList<>();
@@ -17,11 +16,25 @@ public class VehicleRental {
     public Vehicle[] getVehicles() {
         return vehicles;
     }
-
-    public boolean isAvailable(Vehicle vehicle) {
-        return !rentedVehicles.contains(vehicle);
+    public ArrayList<Vehicle> getRentedVehicles() {
+        return rentedVehicles;
     }
 
+    public boolean isAvailable(Vehicle vehicle) {
+
+        return !rentedVehicles.contains(vehicle);
+
+
+    }
+    public ArrayList<Vehicle> findVehicle(String brand, String name) {
+        ArrayList<Vehicle> foundVehicles = new ArrayList<>();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.getBrand().equals(brand) && vehicle.getName().equals(name)) {
+                foundVehicles.add(vehicle);
+            }
+        }
+        return foundVehicles;
+    }
     public void rentVehicle(int index) {
         if (index <= vehicles.length && index > 0) {
             if (isAvailable(vehicles[index - 1])) {
