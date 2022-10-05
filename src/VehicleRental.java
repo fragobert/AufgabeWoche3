@@ -5,12 +5,12 @@ public class VehicleRental {
     private static final String[] colorsInConsole = {ConsoleColors.RED, ConsoleColors.BLUE, ConsoleColors.GREEN, ConsoleColors.YELLOW, ConsoleColors.BLACK, ConsoleColors.WHITE, ConsoleColors.BROWN, ConsoleColors.ORANGE, ConsoleColors.PURPLE};
 
     private Vehicle[] vehicles;
-    private ArrayList<Vehicle> rentedVehicles = new ArrayList<>();
+    private final ArrayList<Vehicle> rentedVehicles = new ArrayList<>();
 
     public VehicleRental() {
 
     }
-    protected String getRandom(String[] array) {
+    public String getRandom(String[] array) {
         return array[(int) (Math.random() * array.length)];
     }
 
