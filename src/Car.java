@@ -15,12 +15,12 @@ public class Car extends Vehicle {
     public void printDescription() {
         System.out.println("Ich bin ein " + super.getColor() + "er " + super.getName() + ", Modell " + super.getModel() + " von der Marke " + super.getBrand() + ".");
         System.out.println("Ich verbrauche " + super.getFuelConsumption() + " liter Benzin pro Kilometer und habe noch " + super.getFuelLevel() + " Liter im Tank!");
-        System.out.println("Meine Höchstgeschwindigkeit ist "+getTopspeed()+"km/h");
+        System.out.println("Meine Höchstgeschwindigkeit ist "+getTopSpeed()+"km/h");
     }
     public int getIndexCar() {
         return index;
     }
-    public int getTopspeed(){
+    public int getTopSpeed(){
         return topSpeed;
     }
 }

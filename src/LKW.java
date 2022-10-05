@@ -5,7 +5,7 @@ public class LKW extends Vehicle {
 
 
 
-    public LKW(int model, int fuelConsumption, int fuelTankCapacity, String name, String color, String brand, int maxWeight) {
+    public LKW(int model, int fuelConsumption, int fuelTankCapacity, int maxWeight, String name, String color, String brand) {
         super(model, fuelConsumption, fuelTankCapacity, name, color, brand);
         counter++;
         index = counter;

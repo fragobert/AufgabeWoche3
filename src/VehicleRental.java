@@ -7,13 +7,31 @@ public class VehicleRental {
     private Vehicle[] vehicles;
     private ArrayList<Vehicle> rentedVehicles = new ArrayList<>();
 
-    public VehicleRental(int arraySize) {
-        if (arraySize >= 0) {
-            vehicles = new Vehicle[arraySize];
+    public VehicleRental() {
 
-        }else{
-            System.out.println(ConsoleColors.RED + "Error: Number must be a positive integer!" + ConsoleColors.RESET);
-            System.exit(0);
-        }
+    }
+    protected String getRandom(String[] array) {
+        return array[(int) (Math.random() * array.length)];
+    }
+
+    public Vehicle[] getVehicles() {
+        return vehicles;
+    }
+
+    public boolean isAvailable(Vehicle vehicle) {
+        return !rentedVehicles.contains(vehicle);
+    }
+
+    public void rentVehicle(int index) {
+        if (index <= vehicles.length && index > 0) {
+            if (isAvailable(vehicles[index - 1])) {
+                rentedVehicles.add(vehicles[index - 1]);
+                System.out.println("Das Fahrzeug wurde erfolgreich ausgeliehen!");
+            } else System.out.println(ConsoleColors.RED + "Fahrzeug ist nicht verfuegbar!" + ConsoleColors.RESET);
+        } else System.out.println(ConsoleColors.RED + "Fahrzeug existiert nicht!" + ConsoleColors.RESET);
+    }
+
+    public String[] getColors() {
+        return colors;
     }
 }
