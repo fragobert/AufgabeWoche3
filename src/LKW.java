@@ -3,6 +3,8 @@ public class LKW extends Vehicle {
     final private int index;
     final private int maxWeight;
 
+
+
     public LKW(int model, int fuelConsumption, int fuelTankCapacity, String name, String color, String brand, int maxWeight) {
         super(model, fuelConsumption, fuelTankCapacity, name, color, brand);
         counter++;

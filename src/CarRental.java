@@ -13,7 +13,7 @@ public class CarRental {
             System.exit(0);
         }
         for (int i = 0; i < arraySize; i++) {
-            cars.add(new Car((int) (Math.random() * 1000), (int) (Math.random() * 10), (int) (Math.random() * 100), getRandom(names), getRandom(colors), getRandom(brands)));
+            cars.add(new Car((int) (Math.random() * 1000), (int) (Math.random() * 10), (int) (Math.random() * 100), (int)(Math.random()*1000),getRandom(names), getRandom(colors), getRandom(brands)));
         }
     }
 
